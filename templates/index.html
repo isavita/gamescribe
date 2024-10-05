@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamescribe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Gamescribe</h1>
+    <form id="gameForm" enctype="multipart/form-data">
+        <div id="imageInputs">
+            <div>
+                <label for="image1">Image 1:</label>
+                <input type="file" id="image1" name="images">
+            </div>
+        </div>
+        <button type="button" id="addImage">Add Another Image</button>
+        <div>
+            <label for="userIdea">Your game idea:</label>
+            <textarea id="userIdea" name="user_idea"></textarea>
+        </div>
+        <button type="submit">Generate Game Idea</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        let imageCount = 1;
+        document.getElementById('addImage').addEventListener('click', function() {
+            imageCount++;
+            const newInput = document.createElement('div');
+            newInput.innerHTML = `
+                <label for="image${imageCount}">Image ${imageCount}:</label>
+                <input type="file" id="image${imageCount}" name="images">
+            `;
+            document.getElementById('imageInputs').appendChild(newInput);
+        });
+
+        document.getElementById('gameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.game_idea;
+            });
+        });
+    </script>
+</body>
+</html>
