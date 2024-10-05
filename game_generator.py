@@ -9,7 +9,7 @@ MODEL_BUILD_GAME = "mistral/mistral-large-latest" # "mistral/open-mistral-nemo"
 
 def generate_game_idea(game_descriptions, user_idea):
     logger.debug(f"Generating game idea based on {len(game_descriptions)} game descriptions and user idea")
-    generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on user ideas and existing game references."""
+    generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on existing game references and optional user ideas."""
     
     games_prompt = ""
     if game_descriptions:
@@ -18,21 +18,36 @@ def generate_game_idea(game_descriptions, user_idea):
             games_prompt += f"Game {i}:\n{desc}\n\n"
     
     logger.debug(f"==========GAMES PROMPT==========:\n{games_prompt}\n================================")
+    
+    user_idea_prompt = ""
+    if user_idea and user_idea.strip():
+        user_idea_prompt = f"""
+User Idea:
+{user_idea}
+
+Consider the user's idea, but prioritize creating a coherent and meaningful game concept."""
+    else:
+        user_idea_prompt = """
+Focus on creating a coherent and meaningful game concept based on the provided game examples."""
+
     generator_user_prompt = f"""Synthesize a new 2D game concept by combining elements from the following inputs:
 
 {games_prompt}
+{user_idea_prompt}
 
-User Idea:
-{user_idea}
+Important guidelines:
+- Prioritize creating a consistent and meaningful game concept over strictly adhering to all provided examples.
+- Feel free to exclude or modify elements from the example games if it results in a more coherent design.
+- Ensure that the final concept is original and not a direct copy of any single example game.
 
 Create a detailed game description including:
 1. Concise overview
 2. Gameplay mechanics
 3. Visual style
 4. Unique features
-5. Ensure the description is comprehensive enough for direct game development.
 
 Provide only the requested information, omitting any additional commentary."""
+
     logger.debug(f"==========GENERATOR USER PROMPT==========:\n{generator_user_prompt}\n================================")
     logger.debug("Sending prompt to AI for game idea generation")
     response = completion(
@@ -46,7 +61,6 @@ Provide only the requested information, omitting any additional commentary."""
     response_content = response.choices[0].message.content
     logger.debug(f"==========GAME IDEA RESPONSE==========:\n{response_content}\n================================")
     return response_content
-
 def generate_playable_game(game_description):
     logger.debug(f"Generating playable game based on description")
     build_game_system_prompt = (
