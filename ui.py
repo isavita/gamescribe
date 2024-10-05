@@ -9,6 +9,7 @@ ui_blueprint = Blueprint('ui', __name__)
 
 @ui_blueprint.route('/', methods=['GET', 'POST'])
 def index():
+    logger.debug("Received request to index")
     if request.method == 'POST':
         logger.debug("Received POST request")
         images = request.files.getlist('images')

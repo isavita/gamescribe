@@ -8,11 +8,11 @@ MODEL_PROCESS_IMAGE = "mistral/pixtral-12b-2409"
 
 def encode_image(image_file):
     """Encode the image to base64."""
-    logger.debug(f"Encoding image: {image_file.filename}")
+    # logger.debug(f"Encoding image: {image_file.filename}")
     return base64.b64encode(image_file.read()).decode('utf-8')
 
 def process_image(image_file):
-    logger.debug(f"Processing image: {image_file.filename}")
+    # logger.debug(f"Processing image: {image_file.filename}")
     base64_image = encode_image(image_file)
     image_system_prompt = "You are a game design bot tasked with describing screenshots from 2D games to assist in game development and design."
     image_user_prompt = """Could you describe the game design elements, features, and the genre of the 2D game depicted in this screenshot to assist in game development and design?
