@@ -4,12 +4,12 @@ import re
 
 logger = logging.getLogger(__name__)
 
-MODEL_GENERATE_GAME = "mistral/open-mistral-nemo" # "mistral/mistral-large-latest"
+MODEL_GENERATE_GAME = "mistral/mistral-large-latest" # "mistral/open-mistral-nemo"
 MODEL_BUILD_GAME = "mistral/mistral-large-latest" # "mistral/open-mistral-nemo"
 
 def generate_game_idea(game_descriptions, user_idea):
     logger.debug(f"Generating game idea based on {len(game_descriptions)} game descriptions and user idea")
-    generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on existing game references and optional user ideas."""
+    generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on existing game references and optional user ideas. Your output should be an original concept without direct references to the input examples."""
     
     games_prompt = ""
     if game_descriptions:
@@ -28,17 +28,18 @@ User Idea:
 Consider the user's idea, but prioritize creating a coherent and meaningful game concept."""
     else:
         user_idea_prompt = """
-Focus on creating a coherent and meaningful game concept based on the provided game examples."""
+No specific user idea provided. Focus on creating a coherent and meaningful game concept based on the provided game examples."""
 
-    generator_user_prompt = f"""Synthesize a new 2D game concept by combining elements from the following inputs:
+    generator_user_prompt = f"""Synthesize a new 2D game concept by drawing inspiration from the following inputs:
 
 {games_prompt}
 {user_idea_prompt}
 
 Important guidelines:
+- Create an entirely original game concept. Do not directly reference or mention any of the example games in your output.
 - Prioritize creating a consistent and meaningful game concept over strictly adhering to all provided examples.
 - Feel free to exclude or modify elements from the example games if it results in a more coherent design.
-- Ensure that the final concept is original and not a direct copy of any single example game.
+- Ensure that the final concept is original and not a copy of any single example game or existing game.
 
 Create a detailed game description including:
 1. Concise overview
@@ -46,7 +47,7 @@ Create a detailed game description including:
 3. Visual style
 4. Unique features
 
-Provide only the requested information, omitting any additional commentary."""
+Provide only the requested information, omitting any additional commentary or references to the input examples."""
 
     logger.debug(f"==========GENERATOR USER PROMPT==========:\n{generator_user_prompt}\n================================")
     logger.debug("Sending prompt to AI for game idea generation")
