@@ -1,7 +1,7 @@
 import logging
 from flask import Blueprint, render_template, request, jsonify
 from image_processor import process_image
-from game_generator import generate_game_idea
+from game_generator import generate_game_idea, generate_playable_game
 
 logger = logging.getLogger(__name__)
 
@@ -28,3 +28,11 @@ def index():
     
     logger.debug("Rendering index page")
     return render_template('index.html')
+
+@ui_blueprint.route('/generate_game', methods=['POST'])
+def generate_game():
+    logger.debug("Received request to generate playable game")
+    game_description = request.json.get('game_description', '')
+    game_code = generate_playable_game(game_description)
+    logger.debug("Generated playable game code")
+    return jsonify({'game_code': game_code})
