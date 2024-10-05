@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.register_blueprint(ui_blueprint)
 
 if __name__ == '__main__':
-    debug_env = os.environ.get('DEBUG', 'true').lower()
+    debug_env = os.environ.get('DEBUG', 'false').lower()
     debug_mode = debug_env == 'true'
     print(f"DEBUG environment variable: {debug_env}")
 
