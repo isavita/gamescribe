@@ -4,6 +4,8 @@ from litellm import completion
 
 logger = logging.getLogger(__name__)
 
+MODEL_PROCESS_IMAGE = "mistral/pixtral-12b-2409"
+
 def encode_image(image_file):
     """Encode the image to base64."""
     logger.debug(f"Encoding image: {image_file.filename}")
@@ -18,7 +20,7 @@ def process_image(image_file):
     
     logger.debug("Sending image to AI for analysis")
     response = completion(
-        model="mistral/pixtral-12b-2409", 
+        model=MODEL_PROCESS_IMAGE, 
         messages=[
             {"role": "system", "content": image_system_prompt},
             {"role": "user", "content": [
@@ -28,4 +30,6 @@ def process_image(image_file):
         ]
     )
     logger.debug("Received response from AI")
-    return response.choices[0].message.content
+    response_content = response.choices[0].message.content
+    logger.debug(f"==========IMAGE PROCESS RESPONSE==========:\n{response_content}\n================================")
+    return response_content

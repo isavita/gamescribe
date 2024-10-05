@@ -4,6 +4,9 @@ import re
 
 logger = logging.getLogger(__name__)
 
+MODEL_GENERATE_GAME = "mistral/mistral-large-latest"
+MODEL_BUILD_GAME = "mistral/mistral-large-latest"
+
 def generate_game_idea(game_descriptions, user_idea):
     logger.debug(f"Generating game idea based on {len(game_descriptions)} game descriptions and user idea")
     generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on user ideas and existing game references."""
@@ -14,6 +17,7 @@ def generate_game_idea(game_descriptions, user_idea):
         for i, desc in enumerate(game_descriptions, 1):
             games_prompt += f"Game {i}:\n{desc}\n\n"
     
+    logger.debug(f"==========GAMES PROMPT==========:\n{games_prompt}\n================================")
     generator_user_prompt = f"""Synthesize a new 2D game concept by combining elements from the following inputs:
 
     {games_prompt}
@@ -26,17 +30,19 @@ def generate_game_idea(game_descriptions, user_idea):
     3. Visual style
     4. Unique features
     5. Ensure the description is comprehensive enough for direct game development."""
-    
+    logger.debug(f"==========GENERATOR USER PROMPT==========:\n{generator_user_prompt}\n================================")
     logger.debug("Sending prompt to AI for game idea generation")
     response = completion(
-        model="mistral/mistral-large-latest",
+        model=MODEL_GENERATE_GAME,
         messages=[
             {"role": "system", "content": generator_system_prompt},
             {"role": "user", "content": generator_user_prompt}
         ]
     )
     logger.debug("Received response from AI")
-    return response.choices[0].message.content
+    response_content = response.choices[0].message.content
+    logger.debug(f"==========GAME IDEA RESPONSE==========:\n{response_content}\n================================")
+    return response_content
 
 def generate_playable_game(game_description):
     logger.debug(f"Generating playable game based on description")
@@ -58,10 +64,11 @@ def generate_playable_game(game_description):
     - Do not include any explanatory text or comments—only provide the code.
     """
 
+    logger.debug(f"==========BUILD GAME USER PROMPT==========:\n{build_game_user_prompt}\n================================")
     logger.debug("Sending prompt to AI for playable game generation")
     response = completion(
         temperature=0.0,
-        model="mistral/mistral-large-latest",
+        model=MODEL_BUILD_GAME,
         messages=[
             {"role": "system", "content": build_game_system_prompt},
             {"role": "user", "content": build_game_user_prompt}
@@ -69,7 +76,7 @@ def generate_playable_game(game_description):
     )
     logger.debug("Received response from AI")
     game_code = response.choices[0].message.content.strip()
-
+    logger.debug(f"==========GAME CODE RESPONSE==========:\n{game_code}\n================================")
     # Process the game code to extract HTML
     code_match = re.search(r"```html(.*?)```", game_code, re.DOTALL)
     if code_match:

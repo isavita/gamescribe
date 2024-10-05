@@ -22,6 +22,7 @@ def index():
         
         logger.debug("Generating game idea")
         game_idea = generate_game_idea(processed_images, user_idea)
+        logger.debug(f"==========GAME IDEA==========:\n{game_idea}\n================================")
         
         logger.debug("Sending response")
         return jsonify({'game_idea': game_idea})
