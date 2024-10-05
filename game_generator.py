@@ -1,10 +1,12 @@
+import logging
 from litellm import completion
 
+logger = logging.getLogger(__name__)
+
 def generate_game_idea(game_descriptions, user_idea):
-    generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on user ideas and existing game references.
-    Your output includes a concise game overview followed by comprehensive gameplay, visual, and mechanical details suitable for direct game development."""
+    logger.debug(f"Generating game idea based on {len(game_descriptions)} game descriptions and user idea")
+    generator_system_prompt = """You are a Game Concept Generator, specialized in crafting detailed 2D game descriptions based on user ideas and existing game references."""
     
-    # Prepare the game descriptions part of the prompt
     games_prompt = ""
     if game_descriptions:
         games_prompt = "Game Examples:\n"
@@ -18,16 +20,13 @@ def generate_game_idea(game_descriptions, user_idea):
     {user_idea}
 
     Create a detailed game description including:
-
     1. Concise overview
     2. Gameplay mechanics
     3. Visual style
     4. Unique features
-    5. Ensure the description is comprehensive enough for direct game development.
-
-    Provide only the requested information, omitting any additional commentary.
-    If no game examples were provided, focus solely on expanding the user's idea into a full game concept."""
+    5. Ensure the description is comprehensive enough for direct game development."""
     
+    logger.debug("Sending prompt to AI for game idea generation")
     response = completion(
         model="mistral/mistral-large-latest",
         messages=[
@@ -35,4 +34,5 @@ def generate_game_idea(game_descriptions, user_idea):
             {"role": "user", "content": generator_user_prompt}
         ]
     )
+    logger.debug("Received response from AI")
     return response.choices[0].message.content

@@ -36,3 +36,13 @@ Gamescribe generates 2D game concepts based on user-uploaded images and text inp
 ## Usage
 
 Upload images, enter your game idea, and click "Generate Game Idea" to get an AI-generated game concept.
+
+## Running in Debug Mode
+
+To run the application in debug mode, which provides more detailed logging, use:
+
+```
+DEBUG=true python main.py
+```
+
+This will enable verbose logging in the terminal, showing detailed information about the application's operations.

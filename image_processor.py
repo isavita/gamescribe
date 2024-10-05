@@ -1,16 +1,22 @@
 import base64
+import logging
 from litellm import completion
+
+logger = logging.getLogger(__name__)
 
 def encode_image(image_file):
     """Encode the image to base64."""
+    logger.debug(f"Encoding image: {image_file.filename}")
     return base64.b64encode(image_file.read()).decode('utf-8')
 
 def process_image(image_file):
+    logger.debug(f"Processing image: {image_file.filename}")
     base64_image = encode_image(image_file)
     image_system_prompt = "You are a game design bot tasked with describing screenshots from 2D games to assist in game development and design."
     image_user_prompt = """Could you describe the game design elements, features, and the genre of the 2D game depicted in this screenshot to assist in game development and design?
     Provide only the requested information, omitting any additional commentary."""
     
+    logger.debug("Sending image to AI for analysis")
     response = completion(
         model="mistral/pixtral-12b-2409", 
         messages=[
@@ -21,4 +27,5 @@ def process_image(image_file):
             ]}
         ]
     )
+    logger.debug("Received response from AI")
     return response.choices[0].message.content
