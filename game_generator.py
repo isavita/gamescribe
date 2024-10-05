@@ -4,8 +4,8 @@ import re
 
 logger = logging.getLogger(__name__)
 
-MODEL_GENERATE_GAME = "mistral/mistral-large-latest"
-MODEL_BUILD_GAME = "mistral/mistral-large-latest"
+MODEL_GENERATE_GAME = "mistral/open-mistral-nemo" # "mistral/mistral-large-latest"
+MODEL_BUILD_GAME = "mistral/mistral-large-latest" # "mistral/open-mistral-nemo"
 
 def generate_game_idea(game_descriptions, user_idea):
     logger.debug(f"Generating game idea based on {len(game_descriptions)} game descriptions and user idea")
@@ -20,16 +20,19 @@ def generate_game_idea(game_descriptions, user_idea):
     logger.debug(f"==========GAMES PROMPT==========:\n{games_prompt}\n================================")
     generator_user_prompt = f"""Synthesize a new 2D game concept by combining elements from the following inputs:
 
-    {games_prompt}
-    User Idea:
-    {user_idea}
+{games_prompt}
 
-    Create a detailed game description including:
-    1. Concise overview
-    2. Gameplay mechanics
-    3. Visual style
-    4. Unique features
-    5. Ensure the description is comprehensive enough for direct game development."""
+User Idea:
+{user_idea}
+
+Create a detailed game description including:
+1. Concise overview
+2. Gameplay mechanics
+3. Visual style
+4. Unique features
+5. Ensure the description is comprehensive enough for direct game development.
+
+Provide only the requested information, omitting any additional commentary."""
     logger.debug(f"==========GENERATOR USER PROMPT==========:\n{generator_user_prompt}\n================================")
     logger.debug("Sending prompt to AI for game idea generation")
     response = completion(
