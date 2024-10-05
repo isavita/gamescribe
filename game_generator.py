@@ -42,10 +42,40 @@ Important guidelines:
 - Ensure that the final concept is original and not a copy of any single example game or existing game.
 
 Create a detailed game description including:
-1. Concise overview
-2. Gameplay mechanics
-3. Visual style
-4. Unique features
+
+1. Game Concept:
+   - Title
+   - Genre
+   - High-level premise or hook
+
+2. Core Gameplay Loop:
+   - Main player actions
+   - Objectives and goals
+   - Progression system
+
+3. Game World:
+   - Setting and atmosphere
+   - Key locations or levels
+   - Notable characters or entities
+
+4. Visual Style and Audio:
+   - Art style description
+   - Color palette
+   - Music and sound effects theme
+
+5. Unique Mechanics or Features:
+   - Special abilities or power-ups
+   - Innovative gameplay elements
+   - Distinguishing factors from similar games
+
+6. Player Interaction:
+   - Controls overview
+   - User interface description
+   - Feedback systems (score, health, etc.)
+
+7. Technical Considerations:
+   - Perspective (side-scrolling, top-down, etc.)
+   - Key algorithms or systems (e.g., procedural generation, physics)
 
 Provide only the requested information, omitting any additional commentary or references to the input examples."""
 
