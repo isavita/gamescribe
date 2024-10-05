@@ -69,17 +69,19 @@ def generate_playable_game(game_description):
     )
 
     build_game_user_prompt = f"""
-    Please create a 2D JavaScript game based on the following description:
+Please create a 2D JavaScript game based on the following description:
 
-    {game_description}
+{game_description}
 
-    **Requirements:**
-    - The game should be fully contained in a single HTML file.
-    - Include all necessary JavaScript and CSS within the HTML file (no external files).
-    - Ensure the game is visually appealing with engaging graphics and design elements.
-    - The game should run independently and be embeddable using an iframe.
-    - Do not include any explanatory text or comments—only provide the code.
-    """
+**Requirements:**
+- The game should be fully contained in a single HTML file.
+- Include all necessary JavaScript and CSS within the HTML file (no external files).
+- Ensure the game is visually appealing with engaging graphics and design elements.
+- The game should run independently and be embeddable using an iframe.
+- Do not include any explanatory text or comments—only provide the code.
+
+Before to generate the game please spend some time to consider the best way to implement the game
+consider the above requirements and the description. Put your thoughts in a json object with key "thoughts"."""
 
     logger.debug(f"==========BUILD GAME USER PROMPT==========:\n{build_game_user_prompt}\n================================")
     logger.debug("Sending prompt to AI for playable game generation")
