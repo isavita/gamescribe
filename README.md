@@ -1,10 +1,6 @@
 # Gamescribe
 
-Gamescribe generates 2D game concepts based on user-uploaded images and text input using AI. This project was created for the Mistral London Hackathon.
-
-## Mistral London Hackathon
-
-This project is a submission for the Mistral London Hackathon. It showcases the capabilities of Mistral AI in game concept generation and image analysis.
+Gamescribe generates 2D game concepts based on user-uploaded images and text input using AI. **This project was created for the Mistral London Hackathon on October 5-6, 2024**.
 
 ## Quick Start
 
