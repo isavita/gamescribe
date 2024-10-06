@@ -13,7 +13,7 @@ def process_image(image_file):
     mime_type = get_mime_type(image_file.filename)
     
     image_system_prompt = "You are a game design bot tasked with describing screenshots from 2D games to assist in game development and design."
-    image_user_prompt = """Could you describe the game design elements, features, and the genre of the 2D game depicted in this screenshot to assist in game development and design?
+    image_user_prompt = """Could you describe the game design elements, features, mood, main idea, and the genre of the 2D game depicted in this screenshot to assist in game development and design?
     Provide only the requested information, omitting any additional commentary."""
     
     logger.debug("Sending image to AI for analysis")

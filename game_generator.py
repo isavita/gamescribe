@@ -40,42 +40,41 @@ Important guidelines:
 - Prioritize creating a consistent and meaningful game concept over strictly adhering to all provided examples.
 - Feel free to exclude or modify elements from the example games if it results in a more coherent design.
 - Ensure that the final concept is original and not a copy of any single example game or existing game.
+- The game should be single screen and should be embeddable in an iframe.
 
 Create a detailed game description including:
 
 1. Game Concept:
    - Title
    - Genre
-   - High-level premise or hook
+   - Premise
 
-2. Core Gameplay Loop:
-   - Main player actions
-   - Objectives and goals
-   - Progression system
+2. Gameplay:
+   - Player actions
+   - Goals
+   - Progression
 
-3. Game World:
-   - Setting and atmosphere
-   - Key locations or levels
-   - Notable characters or entities
+3. World:
+   - Setting
+   - Key locations
+   - Characters
 
-4. Visual Style and Audio:
-   - Art style description
-   - Color palette
-   - Music and sound effects theme
+4. Visuals/Audio:
+   - Art style
+   - Colors
+   - Sound theme
 
-5. Unique Mechanics or Features:
-   - Special abilities or power-ups
-   - Innovative gameplay elements
-   - Distinguishing factors from similar games
+5. Unique Features:
+   - Special abilities
+   - Innovative elements
 
-6. Player Interaction:
-   - Controls overview
-   - User interface description
-   - Feedback systems (score, health, etc.)
+6. Controls/UI:
+   - Input method
+   - HUD elements
 
-7. Technical Considerations:
-   - Perspective (side-scrolling, top-down, etc.)
-   - Key algorithms or systems (e.g., procedural generation, physics)
+7. Technical:
+   - Perspective
+   - Key systems
 
 Provide only the requested information, omitting any additional commentary or references to the input examples."""
 
@@ -92,6 +91,7 @@ Provide only the requested information, omitting any additional commentary or re
     response_content = response.choices[0].message.content
     logger.debug(f"==========GAME IDEA RESPONSE==========:\n{response_content}\n================================")
     return response_content
+
 def generate_playable_game(game_description):
     logger.debug(f"Generating playable game based on description")
     build_game_system_prompt = (
