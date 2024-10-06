@@ -5,67 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamescribe</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'IM Fell English', serif;
             line-height: 1.6;
-            color: #333;
-            max-width: 800px;
+            color: #2c2416;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f0e7d8;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
         }
         h1 {
-            color: #2c3e50;
+            color: #4a3a2a;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 2px;
         }
         form {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            background-color: #e8dcc8;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid #b8a88e;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #4a3a2a;
         }
         input[type="file"], textarea {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #b8a88e;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f5f0e6;
+            color: #2c2416;
+            font-family: 'IM Fell English', serif;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
         }
         button {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 15px;
+            background-color: #8b7355;
+            color: #f5f0e6;
+            padding: 12px 20px;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            font-family: 'IM Fell English', serif;
         }
         button:hover {
-            background-color: #2980b9;
+            background-color: #6e5c44;
         }
         #result {
-            background-color: #ecf0f1;
+            background-color: #e8dcc8;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             white-space: pre-wrap;
+            margin-top: 20px;
+            border: 1px solid #b8a88e;
         }
         #copyButton {
             margin-top: 10px;
         }
         .image-preview {
-            max-width: 200px;
-            max-height: 200px;
+            max-width: 400px;
+            height: auto;
             margin-top: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #b8a88e;
         }
         .image-container {
             margin-bottom: 20px;
+            position: relative;
         }
         #gameContainer {
-            margin-top: 20px;
+            margin-top: 30px;
         }
         #gameFrame {
             width: 100%;
             height: 600px;
             border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .remove-image {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #8b7355;
+            color: #f5f0e6;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .remove-image:hover {
+            background-color: #6e5c44;
+        }
+        h2 {
+            color: #4a3a2a;
+            font-size: 1.8em;
+            margin-top: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -77,6 +137,7 @@
                 <label for="image1">Image 1:</label>
                 <input type="file" id="image1" name="images" accept="image/*">
                 <img id="preview1" class="image-preview" style="display: none;">
+                <button type="button" class="remove-image" style="display: none;">&times;</button>
             </div>
         </div>
         <button type="button" id="addImage">Add Another Image</button>
@@ -98,7 +159,6 @@
         <iframe id="gameFrame"></iframe>
     </div>
 
-
     <script>
         let imageCount = 1;
 
@@ -115,9 +175,31 @@
             }
         }
 
-        document.getElementById('image1').addEventListener('change', function() {
-            previewImage(this);
-        });
+        function previewImage(input) {
+            const preview = document.getElementById('preview' + input.id.slice(-1));
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    input.closest('.image-container').querySelector('.remove-image').style.display = 'flex';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function addRemoveImageListener(container) {
+            const removeButton = container.querySelector('.remove-image');
+            const fileInput = container.querySelector('input[type="file"]');
+            const preview = container.querySelector('.image-preview');
+
+            removeButton.addEventListener('click', function() {
+                fileInput.value = '';
+                preview.style.display = 'none';
+                removeButton.style.display = 'none';
+            });
+        }
 
         document.getElementById('addImage').addEventListener('click', function() {
             imageCount++;
@@ -127,13 +209,22 @@
                 <label for="image${imageCount}">Image ${imageCount}:</label>
                 <input type="file" id="image${imageCount}" name="images" accept="image/*">
                 <img id="preview${imageCount}" class="image-preview" style="display: none;">
+                <button type="button" class="remove-image" style="display: none;">&times;</button>
             `;
             document.getElementById('imageInputs').appendChild(newInput);
-            document.getElementById(`image${imageCount}`).addEventListener('change', function() {
+            const newFileInput = document.getElementById(`image${imageCount}`);
+            newFileInput.addEventListener('change', function() {
                 previewImage(this);
+                addRemoveImageListener(newInput);
             });
         });
 
+        // Add this to initialize the first image input
+        document.getElementById('image1').addEventListener('change', function() {
+            previewImage(this);
+            addRemoveImageListener(this.closest('.image-container'));
+        });
+        
         document.getElementById('gameForm').addEventListener('submit', function(e) {
             e.preventDefault();
             var formData = new FormData(this);
