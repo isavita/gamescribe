@@ -46,3 +46,7 @@ DEBUG=true python main.py
 ```
 
 This will enable verbose logging in the terminal, showing detailed information about the application's operations.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
